@@ -23,6 +23,10 @@ module.exports = {
     "class-methods-use-this": "off",
     "no-param-reassign": "off",
     "camelcase": "off",
+    "no-confusing-arrow": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
+    "comma-dangle": "off",
     "no-unused-vars": ["error", { "argsIgonorePattern": "next"}],
     // "indent": ["error", 2]
   },
