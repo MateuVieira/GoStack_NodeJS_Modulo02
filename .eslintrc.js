@@ -23,6 +23,7 @@ module.exports = {
     "class-method-use-this": "off",
     "no-param-reasign": "off",
     "camelcase": "off",
-    "no-unused-vars": ["error", { "argsIgonorePattern": "next"}]
+    "no-unused-vars": ["error", { "argsIgonorePattern": "next"}],
+    "indent": ["error", 2]
   },
 };
