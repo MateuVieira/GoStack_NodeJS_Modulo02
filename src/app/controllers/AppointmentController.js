@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+// eslint-disable-next-line object-curly-newline
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
 import User from '../models/User';
@@ -59,6 +60,12 @@ class AppointmentController {
         .json({ error: 'You can only make appointments with providers.' });
     }
 
+    if (provider_id === req.userId) {
+      return res.status(401).json({
+        error: 'The provider cannot make an appointment with himself.',
+      });
+    }
+
     const hourStart = startOfHour(parseISO(date));
 
     // Check for past dates
@@ -97,6 +104,30 @@ class AppointmentController {
       content: `Novo agendamento de ${user.name} para o ${formatedDate}.`,
       user: provider_id,
     });
+
+    return res.json(appointment);
+  }
+
+  async delete(req, res) {
+    const appointment = Appointment.findByPk(req.params.id);
+
+    if (appointment.user_id !== req.userId) {
+      return res.status(401).json({
+        error: "You don't have permission to cancel this appointment.",
+      });
+    }
+
+    const dateWithSub = subHours(appointment.date, 2);
+
+    if (isBefore(dateWithSub, new Date())) {
+      return res.status(401).json({
+        error: 'You can only cancel appointments 2 hours in advance.',
+      });
+    }
+
+    appointment.cancel_at = new Date();
+
+    await appointment.save();
 
     return res.json(appointment);
   }
