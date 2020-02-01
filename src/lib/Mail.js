@@ -9,7 +9,7 @@ class Mail {
     // eslint-disable-next-line object-curly-newline
     const { host, port, secure, auth } = mailConfig;
 
-    this.tranporter = nodemailer.createTransport({
+    this.transporter = nodemailer.createTransport({
       host,
       port,
       secure,
@@ -22,10 +22,10 @@ class Mail {
   configureTemplates() {
     const viewPath = resolve(__dirname, '..', 'app', 'views', 'emails');
 
-    this.tranporter.use(
+    this.transporter.use(
       'compile',
       nodemailerhbs({
-        viewEnine: exphbs.create({
+        viewEngine: exphbs.create({
           layoutsDir: resolve(viewPath, 'layouts'),
           partialsDir: resolve(viewPath, 'partials'),
           defaultLayout: 'default',
@@ -38,7 +38,7 @@ class Mail {
   }
 
   sendMail(message) {
-    return this.tranporter.sendMail({
+    return this.transporter.sendMail({
       ...mailConfig.default,
       ...message,
     });
